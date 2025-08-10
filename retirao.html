@@ -1,0 +1,1284 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retirão Rotas - Melhores Trajetos em Salvador</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Variáveis de Cores - Azul Bebê */
+        :root {
+            --primary-color: #87CEEB; /* Azul Céu */
+            --secondary-color: #ADD8E6; /* Azul Claro */
+            --accent-color: #6495ED; /* Azul Cornflower */
+            --dark-color: #4682B4; /* Azul Aço */
+            --light-color: #F0F8FF; /* Alice Blue */
+            --text-color: #333;
+            --background-light: #E0FFFF; /* Azul Celeste Claro */
+            --border-color: #B0E0E6; /* Azul Pó */
+            --shadow-color: rgba(0, 0, 0, 0.1);
+        }
+
+        /* Reset Básico */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--background-light);
+            color: var(--text-color);
+            line-height: 1.6;
+            scroll-behavior: smooth;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px 0;
+        }
+
+        /* Header */
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 3px 8px var(--shadow-color);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            color: white;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            margin-right: 10px;
+            font-size: 2.5rem;
+            color: var(--light-color);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        nav ul li {
+            margin: 0 1rem;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            padding: 5px 0;
+            position: relative;
+        }
+
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--light-color);
+            transition: width 0.3s ease;
+        }
+
+        nav ul li a:hover::after {
+            width: 100%;
+        }
+
+        .social-icons a {
+            color: white;
+            margin-left: 1.2rem;
+            font-size: 1.5rem;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        .social-icons a:hover {
+            color: var(--dark-color);
+            transform: scale(1.1);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
+                        url('https://images.unsplash.com/photo-1561852639-729121111219?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D') no-repeat center center/cover;
+            height: 600px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            padding: 0 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(70, 130, 180, 0.3); /* Overlay azul aço */
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .search-container {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+            max-width: 700px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            padding: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .search-container input, 
+        .search-container select {
+            padding: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            flex-grow: 1;
+            font-size: 1rem;
+            color: var(--text-color);
+            background-color: white;
+        }
+
+        .search-container button {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .search-container button:hover {
+            background-color: var(--dark-color);
+            transform: translateY(-2px);
+        }
+
+        /* Sections General */
+        section {
+            padding: 4rem 0;
+            background-color: white;
+            margin-bottom: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px var(--shadow-color);
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: var(--dark-color);
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background-color: var(--accent-color);
+            border-radius: 2px;
+        }
+
+        /* Features Section */
+        .features {
+            background-color: var(--background-light);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .feature-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .feature-icon {
+            font-size: 3.5rem;
+            color: var(--accent-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--dark-color);
+        }
+
+        .feature-card p {
+            font-size: 1rem;
+            color: #555;
+        }
+
+        /* Routes Section */
+        .routes {
+            background-color: white;
+        }
+
+        .route-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .route-tab {
+            padding: 0.9rem 2rem;
+            background-color: var(--light-color);
+            border: 1px solid var(--border-color);
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            color: var(--dark-color);
+            font-size: 1rem;
+        }
+
+        .route-tab.active {
+            background-color: var(--accent-color);
+            color: white;
+            border-color: var(--accent-color);
+            box-shadow: 0 4px 10px rgba(100, 149, 237, 0.3);
+        }
+
+        .route-tab:hover:not(.active) {
+            background-color: var(--border-color);
+            color: var(--dark-color);
+        }
+
+        .route-content {
+            display: none;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .route-content.active {
+            display: block;
+        }
+
+        .route-info {
+            background-color: var(--background-light);
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        .route-info h3 {
+            font-size: 2rem;
+            color: var(--dark-color);
+            margin-bottom: 1rem;
+        }
+
+        .route-info p {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .route-map {
+            width: 100%;
+            height: 450px;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .route-map iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .map-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgba(70, 130, 180, 0.8); /* Darker azul aço overlay */
+            color: white;
+            padding: 1rem 1.5rem;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .transport-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .transport-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: transform 0.2s ease;
+        }
+
+        .transport-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .transport-icon {
+            font-size: 2.5rem;
+            margin-right: 1.2rem;
+            color: var(--secondary-color);
+        }
+
+        .transport-details h4 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: var(--dark-color);
+        }
+
+        .transport-details p {
+            font-size: 0.95rem;
+            color: #666;
+        }
+
+        .transport-price {
+            font-weight: bold;
+            color: var(--accent-color);
+            font-size: 1.1rem;
+            margin-top: 0.5rem;
+        }
+
+        .rush-hour-info {
+            margin-top: 2.5rem;
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .rush-hour-info h4 {
+            font-size: 1.4rem;
+            color: var(--dark-color);
+            margin-bottom: 1rem;
+        }
+
+        .time-slots {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .time-slot {
+            background-color: var(--background-light);
+            padding: 0.8rem 1.2rem;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+        }
+
+        .traffic-light {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            margin-right: 0.8rem;
+            border: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .green { background-color: #4CAF50; }
+        .yellow { background-color: #FFC107; }
+        .red { background-color: #F44336; }
+
+        /* Organs Section */
+        .organs {
+            background-color: var(--background-light);
+        }
+
+        .organs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .organ-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .organ-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .organ-card h3 {
+            font-size: 1.6rem;
+            margin-bottom: 1rem;
+            color: var(--dark-color);
+        }
+
+        .organ-card p {
+            font-size: 1rem;
+            color: #555;
+            margin-bottom: 1rem;
+        }
+
+        .organ-link {
+            display: inline-block;
+            margin-top: 1rem;
+            color: var(--accent-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease, text-decoration 0.3s ease;
+        }
+
+        .organ-link:hover {
+            color: var(--dark-color);
+            text-decoration: underline;
+        }
+
+        /* Feedback Section */
+        .feedback {
+            background-color: white;
+        }
+
+        .feedback-form {
+            background-color: var(--background-light);
+            border-radius: 10px;
+            padding: 2.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .form-row {
+            margin-bottom: 1.8rem;
+        }
+
+        .form-row label {
+            display: block;
+            margin-bottom: 0.8rem;
+            font-weight: 600;
+            color: var(--dark-color);
+            font-size: 1.1rem;
+        }
+
+        .form-row input,
+        .form-row select,
+        .form-row textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 1rem;
+            color: var(--text-color);
+            background-color: white;
+        }
+
+        .form-row textarea {
+            height: 160px;
+            resize: vertical;
+        }
+
+        .radio-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-top: 0.8rem;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            font-size: 1rem;
+            color: #555;
+        }
+
+        .radio-option input[type="radio"] {
+            width: auto;
+            margin-right: 0.8rem;
+            transform: scale(1.2);
+            accent-color: var(--accent-color);
+        }
+
+        .form-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: flex-end;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 1rem 2.5rem;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+        }
+
+        .btn-primary {
+            background-color: var(--accent-color);
+            color: white;
+            box-shadow: 0 4px 10px rgba(100, 149, 237, 0.3);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--dark-color);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(100, 149, 237, 0.4);
+        }
+
+        .btn-secondary {
+            background-color: var(--border-color);
+            color: var(--dark-color);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .btn-secondary:hover {
+            background-color: #ADD8E6; /* Light blue */
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark-color);
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+            border-top: 5px solid var(--accent-color);
+        }
+
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .footer-logo {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+            color: var(--light-color);
+        }
+
+        .footer-links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1.5rem 2.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .footer-social {
+            margin-bottom: 2rem;
+        }
+
+        .footer-social a {
+            color: white;
+            font-size: 1.8rem;
+            margin: 0 0.8rem;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        .footer-social a:hover {
+            color: var(--primary-color);
+            transform: scale(1.1);
+        }
+
+        .copyright {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.6);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 2.5rem;
+            border-radius: 10px;
+            max-width: 550px;
+            width: 90%;
+            position: relative;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            transform: translateY(-50px);
+            opacity: 0;
+            animation: slideIn 0.4s forwards;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 1rem;
+            right: 1.5rem;
+            font-size: 2rem;
+            cursor: pointer;
+            color: var(--text-color);
+            transition: color 0.2s ease;
+        }
+
+        .close-modal:hover {
+            color: #FF6347; /* Tomato */
+        }
+
+        .modal-title {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: var(--dark-color);
+            text-align: center;
+        }
+
+        .modal-content p {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            color: #555;
+        }
+
+        .modal-content .btn {
+            display: block;
+            margin: 0 auto;
+            width: fit-content;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 992px) {
+            .hero h1 {
+                font-size: 3rem;
+            }
+            .hero p {
+                font-size: 1.1rem;
+            }
+            .section-title {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            .logo {
+                margin-bottom: 1rem;
+            }
+            nav ul {
+                margin-top: 1rem;
+                margin-bottom: 1rem;
+            }
+            nav ul li {
+                margin: 0 0.8rem;
+            }
+            .social-icons {
+                margin-top: 1rem;
+            }
+            .hero {
+                height: 450px;
+            }
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            .hero p {
+                font-size: 1rem;
+            }
+            .search-container {
+                flex-direction: column;
+                padding: 15px;
+            }
+            .search-container input, 
+            .search-container select,
+            .search-container button {
+                border-radius: 6px;
+                width: 100%;
+            }
+            .search-container button {
+                padding: 0.8rem 1.5rem;
+            }
+            .features-grid, .organs-grid, .transport-options {
+                grid-template-columns: 1fr;
+            }
+            .route-tabs {
+                flex-direction: column;
+                align-items: center;
+            }
+            .route-tab {
+                width: 80%;
+                max-width: 300px;
+            }
+            .form-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            .btn {
+                width: 100%;
+                max-width: 250px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            .section-title {
+                font-size: 1.8rem;
+            }
+            .feature-card h3, .organ-card h3 {
+                font-size: 1.3rem;
+            }
+            .transport-details h4 {
+                font-size: 1.1rem;
+            }
+            .time-slot {
+                font-size: 0.85rem;
+                padding: 0.6rem 1rem;
+            }
+            .modal-content {
+                padding: 1.5rem;
+            }
+            .modal-title {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-content">
+            <a href="#" class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-route"></i>
+                </div>
+                <span>Retirão Rotas</span>
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="#rotas">Rotas</a></li>
+                    <li><a href="#orgaos">Órgãos</a></li>
+                    <li><a href="#feedback">Feedback</a></li>
+                </ul>
+            </nav>
+            <div class="social-icons">
+                <a href="https://instagram.com/ribeirasalvador_" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="mailto:ribeirarotas@gmail.com" aria-label="Email"><i class="far fa-envelope"></i></a>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Descubra as Melhores Rotas em Salvador</h1>
+            <p>Da Ribeira ao SESI Retiro, nós te ajudamos a encontrar o caminho mais rápido, econômico e inteligente para sua jornada.</p>
+            <div class="search-container">
+                <input type="text" placeholder="Origem (ex: Ribeira)" aria-label="Origem da rota">
+                <select aria-label="Destino da rota">
+                    <option value="">Selecione o Destino</option>
+                    <option value="sesi-retiro">SESI Retiro</option>
+                    <option value="centro">Centro</option>
+                    <option value="barra">Barra</option>
+                    <option value="retiro">Retiro</option>
+                </select>
+                <button><i class="fas fa-search"></i> Buscar Rota</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="features">
+        <div class="container">
+            <h2 class="section-title">Por Que Usar o Retirão Rotas?</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-traffic-light"></i>
+                    </div>
+                    <h3>Informações de Trânsito em Tempo Real</h3>
+                    <p>Evite congestionamentos com dados atualizados sobre o fluxo de veículos e horários de pico.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
+                    <h3>Opções de Transporte e Custos</h3>
+                    <p>Compare diferentes meios de transporte, seus tempos de viagem e custos para economizar.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-route"></i>
+                    </div>
+                    <h3>Rotas Otimizadas e Alternativas</h3>
+                    <p>Encontre o caminho mais rápido, o mais econômico ou rotas alternativas para fugir do caos.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="rotas" class="routes">
+        <div class="container">
+            <h2 class="section-title">Rotas Detalhadas: Ribeira ao SESI Retiro</h2>
+            
+            <div class="route-tabs">
+                <button class="route-tab active" onclick="openRouteTab(event, 'rapida')">Mais Rápida</button>
+                <button class="route-tab" onclick="openRouteTab(event, 'economica')">Mais Econômica</button>
+                <button class="route-tab" onclick="openRouteTab(event, 'alternativa')">Alternativa</button>
+            </div>
+            
+            <div id="rapida" class="route-content active">
+                <div class="route-info">
+                    <h3>Rota Mais Rápida</h3>
+                    <p>Esta rota prioriza a velocidade, utilizando as principais vias. O tempo de viagem varia de <strong>35 a 50 minutos</strong> em condições normais, podendo chegar a <strong>70 minutos</strong> nos horários de pico.</p>
+                    
+                    <div class="route-map">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m28!1m12!1m3!1d62207.69863209599!2d-38.51972876933057!3d-12.958914543334151!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m13!3e0!4m5!1s0x71611604c3e7759%3A0x866ec01c7e3d4b38!2sRibeira%2C%20Salvador%20-%20BA!3m2!1d-12.9299291!2d-38.4780202!4m5!1s0x716112050422ebd%3A0x71b4dfbcff1fd918!2sSESI%20Retiro%2C%20Av.%20Orlando%20Gomes%2C%20220%20-%20Piat%C3%A3%2C%20Salvador%20-%20BA%2C%2041670-010!3m2!1d-12.9880735!2d-38.4466435!5e0!3m2!1spt-BR!2sbr!4v1717774428851!5m2!1spt-BR!2sbr" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                        <div class="map-overlay">
+                            <strong>Trajeto Principal:</strong> Ribeira &rarr; Av. Dendezeiros &rarr; Av. Bonfim &rarr; Av. Suburbana &rarr; Av. San Martin &rarr; Av. Barros Reis &rarr; SESI Retiro
+                        </div>
+                    </div>
+                    
+                    <div class="rush-hour-info">
+                        <h4>Trânsito nos Horários de Pico:</h4>
+                        <p>Fique atento aos períodos de maior movimento:</p>
+                        <div class="time-slots">
+                            <div class="time-slot">
+                                <div class="traffic-light red"></div>
+                                <strong>5h - 8h:</strong> Trânsito Intenso
+                            </div>
+                            <div class="time-slot">
+                                <div class="traffic-light yellow"></div>
+                                <strong>12h - 14h:</strong> Trânsito Moderado
+                            </div>
+                            <div class="time-slot">
+                                <div class="traffic-light red"></div>
+                                <strong>17h - 20h:</strong> Trânsito Intenso
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3>Opções de Transporte para a Rota Mais Rápida</h3>
+                <div class="transport-options">
+                    <div class="transport-card">
+                        <div class="transport-icon">
+                            <i class="fas fa-car"></i>
+                        </div>
+                        <div class="transport-details">
+                            <h4>Carro Particular</h4>
+                            <p>Tempo: 35-70 min</p>
+                            <p class="transport-price">Custo Estimado: R$ 20-30 (combustível)</p>
+                        </div>
+                    </div>
+                    <div class="transport-card">
+                        <div class="transport-icon">
+                            <i class="fas fa-taxi"></i>
+                        </div>
+                        <div class="transport-details">
+                            <h4>Táxi / Aplicativo</h4>
+                            <p>Tempo: 35-70 min</p>
+                            <p class="transport-price">Custo Estimado: R$ 50-80</p>
+                        </div>
+                    </div>
+                    <div class="transport-card">
+                        <div class="transport-icon">
+                            <i class="fas fa-bus"></i>
+                        </div>
+                        <div class="transport-details">
+                            <h4>Ônibus (Linha 1604 - Base Naval/Ribeira x Pituba)</h4>
+                            <p>Tempo: 70-90 min (com baldeação)</p>
+                            <p class="transport-price">Custo: R$ 4,50 (uma passagem)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="economica" class="route-content">
+                <div class="route-info">
+                    <h3>Rota Mais Econômica</h3>
+                    <p>Esta rota foca na economia, priorizando o transporte público e caminhos que minimizam custos. O tempo médio de viagem é de aproximadamente <strong>80 minutos</strong>.</p>
+                    
+                    <div class="route-map">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m28!1m12!1m3!1d31104.30752427844!2d-38.50950817038825!3d-12.96489389684453!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m13!3e3!4m5!1s0x71611604c3e7759%3A0x866ec01c7e3d4b38!2sRibeira%2C%20Salvador%20-%20BA!3m2!1d-12.9299291!2d-38.4780202!4m5!1s0x716112050422ebd%3A0x71b4dfbcff1fd918!2sSESI%20Retiro%2C%20Av.%20Orlando%20Gomes%2C%20220%20-%20Piat%C3%A3%2C%20Salvador%20-%20BA%2C%2041670-010!3m2!1d-12.9880735!2d-38.4466435!5e0!3m2!1spt-BR!2sbr!4v1717774801753!5m2!1spt-BR!2sbr" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                        <div class="map-overlay">
+                            <strong>Trajeto Principal:</strong> Ribeira &rarr; Terminal da França &rarr; Metrô (Lapa/Pirajá) &rarr; Ônibus (para SESI Retiro)
+                        </div>
+                    </div>
+                    
+                    <div class="rush-hour-info">
+                        <h4>Trânsito nos Horários de Pico:</h4>
+                        <p>Esta rota, por depender mais de transporte público, pode ter variações de tempo nos horários de pico, mas geralmente é mais previsível em termos de custo.</p>
+                        <div class="time-slots">
+                            <div class="time-slot">
+                                <div class="traffic-light yellow"></div>
+                                <strong>5h - 8h:</strong> Moderado (espera por ônibus/metrô)
+                            </div>
+                            <div class="time-slot">
+                                <div class="traffic-light green"></div>
+                                <strong>12h - 14h:</strong> Livre
+                            </div>
+                            <div class="time-slot">
+                                <div class="traffic-light yellow"></div>
+                                <strong>17h - 20h:</strong> Moderado (espera por ônibus/metrô)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3>Opções de Transporte para a Rota Mais Econômica</h3>
+                <div class="transport-options">
+                    <div class="transport-card">
+                        <div class="transport-icon">
+                            <i class="fas fa-subway"></i>
+                        </div>
+                        <div class="transport-details">
+                            <h4>Ônibus + Metrô + Ônibus</h4>
+                            <p>Tempo: 70-100 min</p>
+                            <p class="transport-price">Custo: R$ 4,50 (bilhete único)</p>
+                        </div>
+                    </div>
+                    <div class="transport-card">
+                        <div class="transport-icon">
+                            <i class="fas fa-bicycle"></i>
+                        </div>
+                        <div class="transport-details">
+                            <h4>Bicicleta</h4>
+                            <p>Tempo: 60-90 min</p>
+                            <p class="transport-price">Custo: R$ 0</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="alternativa" class="route-content">
+                <div class="route-info">
+                    <h3>Rota Alternativa</h3>
+                    <p>Este caminho é ideal para evitar os principais pontos de congestionamento, mesmo que a distância percorrida seja um pouco maior. Pode ser uma ótima opção em horários de tráfego intenso.</p>
+                    
+                    <div class="route-map">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m28!1m12!1m3!1d62207.61035260829!2d-38.525794219330525!3d-12.959137393332613!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m13!3e0!4m5!1s0x71611604c3e7759%3A0x866ec01c7e3d4b38!2sRibeira%2C%20Salvador%20-%20BA!3m2!1d-12.9299291!2d-38.4780202!4m5!1s0x716112050422ebd%3A0x71b4dfbcff1fd918!2sSESI%20Retiro%2C%20Av.%20Orlando%20Gomes%2C%20220%20-%20Piat%C3%A3%2C%20Salvador%20-%20BA%2C%2041670-010!3m2!1d-12.9880735!2d-38.4466435!5e0!3m2!1spt-BR!2sbr!4v1717774839773!5m2!1spt-BR!2sbr" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                        <div class="map-overlay">
+                            <strong>Trajeto Principal:</strong> Ribeira &rarr; Av. Caminho de Areia &rarr; BR-324 &rarr; Av. Barros Reis &rarr; SESI Retiro
+                        </div>
+                    </div>
+                    
+                    <div class="rush-hour-info">
+                        <h4>Comparativo de Trânsito:</h4>
+                        <p>Esta rota alternativa pode ser <strong>10-20 minutos mais longa</strong> em condições de trânsito livre, mas costuma ser <strong>mais rápida e fluida</strong> nos horários de pico, evitando os gargalos principais.</p>
+                        <div class="time-slots">
+                            <div class="time-slot">
+                                <div class="traffic-light yellow"></div>
+                                <strong>5h - 8h:</strong> Moderado (melhor que a rápida)
+                            </div>
+                            <div class="time-slot">
+                                <div class="traffic-light green"></div>
+                                <strong>12h - 14h:</strong> Livre
+                            </div>
+                            <div class="time-slot">
+                                <div class="traffic-light yellow"></div>
+                                <strong>17h - 20h:</strong> Moderado (melhor que a rápida)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3>Opções de Transporte para a Rota Alternativa</h3>
+                <div class="transport-options">
+                    <div class="transport-card">
+                        <div class="transport-icon">
+                            <i class="fas fa-car"></i>
+                        </div>
+                        <div class="transport-details">
+                            <h4>Carro Particular</h4>
+                            <p>Tempo: 45-80 min</p>
+                            <p class="transport-price">Custo Estimado: R$ 25-35 (combustível)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="orgaos" class="organs">
+        <div class="container">
+            <h2 class="section-title">Órgãos Competentes Sobre Tráfego em Salvador</h2>
+            <p class="section-description">Entre em contato com os órgãos responsáveis para informações adicionais ou denúncias.</p>
+            
+            <div class="organs-grid">
+                <div class="organ-card">
+                    <h3>SETRANS - Secretaria Municipal de Mobilidade</h3>
+                    <p>Responsável pela gestão do trânsito e transporte público no município de Salvador.</p>
+                    <a href="http://www.transalvador.salvador.ba.gov.br" target="_blank" class="organ-link">Visitar Site <i class="fas fa-external-link-alt"></i></a>
+                    <p>Telefone: (71) 3611-3800</p>
+                </div>
+                
+                <div class="organ-card">
+                    <h3>DETRAN-BA</h3>
+                    <p>Departamento Estadual de Trânsito da Bahia. Responsável por licenciamento, habilitação e fiscalização.</p>
+                    <a href="http://www.detran.ba.gov.br" target="_blank" class="organ-link">Visitar Site <i class="fas fa-external-link-alt"></i></a>
+                    <p>Telefone: 0800 071 3501</p>
+                </div>
+                
+                <div class="organ-card">
+                    <h3>TRANSALVADOR</h3>
+                    <p>Empresa de Transporte de Salvador, responsável pela operação e fiscalização do transporte público e trânsito.</p>
+                    <a href="http://www.transalvador.salvador.ba.gov.br" target="_blank" class="organ-link">Visitar Site <i class="fas fa-external-link-alt"></i></a>
+                    <p>Telefone: (71) 3202-9000</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="feedback" class="feedback">
+        <div class="container">
+            <h2 class="section-title">Deixe Seu Feedback</h2>
+            <p class="section-description">Sua opinião é muito importante para nós! Envie suas reclamações, elogios ou sugestões.</p>
+            
+            <div class="feedback-form">
+                <form id="feedbackForm">
+                    <div class="form-row">
+                        <label for="name">Nome Completo</label>
+                        <input type="text" id="name" name="name" required placeholder="Seu nome">
+                    </div>
+                    
+                    <div class="form-row">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required placeholder="seu.email@exemplo.com">
+                    </div>
+                    
+                    <div class="form-row">
+                        <label>Tipo de Mensagem</label>
+                        <div class="radio-group">
+                            <div class="radio-option">
+                                <input type="radio" id="complaint" name="messageType" value="Reclamação" checked>
+                                <label for="complaint">Reclamação</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="compliment" name="messageType" value="Elogio">
+                                <label for="compliment">Elogio</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="suggestion" name="messageType" value="Sugestão">
+                                <label for="suggestion">Sugestão</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <label for="message">Sua Mensagem</label>
+                        <textarea id="message" name="message" required placeholder="Descreva sua reclamação, elogio ou sugestão aqui..."></textarea>
+                    </div>
+                    
+                    <div class="form-buttons">
+                        <button type="submit" class="btn btn-primary">Enviar Feedback</button>
+                        <button type="reset" class="btn btn-secondary">Limpar Formulário</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container footer-content">
+            <div class="footer-logo">Retirão Rotas</div>
+            
+            <div class="footer-links">
+                <a href="#rotas">Rotas</a>
+                <a href="#orgaos">Órgãos</a>
+                <a href="#feedback">Feedback</a>
+                <a href="#">Termos de Uso</a>
+                <a href="#">Política de Privacidade</a>
+            </div>
+            
+            <div class="footer-social">
+                <a href="https://instagram.com/ribeirasalvador_" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="mailto:ribeirarotas@gmail.com" aria-label="Email"><i class="far fa-envelope"></i></a>
+            </div>
+            
+            <div class="copyright">
+                &copy; 2023 Retirão Rotas. Todos os direitos reservados.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modal de Sucesso -->
+    <div id="successModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('successModal')">&times;</span>
+            <h3 class="modal-title"><i class="fas fa-check-circle" style="color: #4CAF50; margin-right: 10px;"></i>Mensagem Enviada com Sucesso!</h3>
+            <p>Obrigado pelo seu feedback. Valorizamos muito sua opinião e entraremos em contato se necessário.</p>
+            <button onclick="closeModal('successModal')" class="btn btn-primary">Entendi</button>
+        </div>
+    </div>
+
+    <script>
+        // Função para abrir as abas de rota
+        function openRouteTab(evt, tabId) {
+            const tabContents = document.getElementsByClassName("route-content");
+            for (let i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.remove("active");
+            }
+            
+            const tabButtons = document.getElementsByClassName("route-tab");
+            for (let i = 0; i < tabButtons.length; i++) {
+                tabButtons[i].classList.remove("active");
+            }
+            
+            document.getElementById(tabId).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+        
+        // Lógica do Formulário de Feedback
+        const feedbackForm = document.getElementById("feedbackForm");
+        feedbackForm.addEventListener("submit", function(e) {
+            e.preventDefault(); // Previne o envio padrão do formulário
+            
+            // Simula o envio de dados (em um ambiente real, você enviaria para um servidor)
+            console.log("Formulário de feedback enviado!");
+            
+            // Exibe o modal de sucesso
+            const successModal = document.getElementById("successModal");
+            successModal.classList.add("show"); // Adiciona a classe 'show' para exibir com transição
+            
+            // Reseta o formulário após o "envio"
+            feedbackForm.reset();
+        });
+        
+        // Funções do Modal
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.remove("show"); // Remove a classe 'show' para esconder com transição
+            setTimeout(() => {
+                modal.style.display = "none"; // Esconde completamente após a transição
+            }, 300); // Tempo da transição CSS
+        }
+        
+        // Fechar modal ao clicar fora
+        window.onclick = function(event) {
+            const modals = document.getElementsByClassName("modal");
+            for (let i = 0; i < modals.length; i++) {
+                if (event.target == modals[i]) {
+                    closeModal(modals[i].id);
+                }
+            }
+        }
+
+        // Ativar a primeira aba de rota ao carregar a página
+        document.addEventListener('DOMContentLoaded', (event) => {
+            document.querySelector('.route-tab.active').click();
+        });
+    </script>
+</body>
+</html>
+
